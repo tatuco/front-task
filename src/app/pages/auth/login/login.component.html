@@ -1,0 +1,25 @@
+<section id="login">
+  <div class="login-page">
+    <div class="form">
+      <div>
+        <h1>Login</h1>
+        <p>Ingresa Email y Contraseña</p>
+      </div>
+      <form [formGroup]="form" (submit)="onSubmit()" novalidate>
+        <input type="text" placeholder="Email" formControlName="email" autocomplete="off" [ngClass]="{'input-invalid':fieldErrors('email')}"/>
+        <div style="height: 1rem;">
+          <div class="invalid-text" *ngIf="fieldErrors('email')">
+            * Campo invalido.
+          </div>
+        </div>
+        <input type="password" placeholder="Contraseña" formControlName="password" autocomplete="off" [ngClass]="{'input-invalid':fieldErrors('password')}"/>
+        <div style="height: 1rem;">
+          <div class="invalid-text" *ngIf="fieldErrors('password')">
+            * Campo invalido.
+          </div>
+        </div>
+        <button type="submit" [disabled]="!form.valid">Inicia Sesión </button>
+      </form>
+    </div>
+  </div>
+</section>
