@@ -1,0 +1,17 @@
+.content-list {
+  margin: 0 150px;
+}
+.table-tasks {
+  width: 100%;
+}
+.filter {
+  display: flex;
+  justify-content: space-between;
+}
+mat-row.mat-row.ng-star-inserted:nth-child(even) {
+  background-color: #e8eaec
+}
+.not-data {
+  text-align: center;
+  padding: 10px;
+}

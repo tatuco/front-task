@@ -16,9 +16,9 @@ export class UnauthenticatedGuard implements CanActivate {
     return this.auth.isAuthenticated.pipe(
       map(status => !status),
       tap(status => {
+        console.log(status)
         if (!status) {
-          console.log('Unathenticated');
-          this.router.navigateByUrl('admin/home');
+          this.router.navigateByUrl('/home');
         }
       })
     );

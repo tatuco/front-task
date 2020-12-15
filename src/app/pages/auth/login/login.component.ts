@@ -19,7 +19,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('login');
     this.form = this.fb.group({
       email: [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(25)])],
       password: [null, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(25)])],
@@ -27,21 +26,17 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('LOGUEANDO');
-    // this.router.navigateByUrl('home').then(() => {
-    // });
-
-        this.authService.login(this.form.value)
-          .subscribe(data => {
-              this.toast.success('Autorización exitosa.');
-              this.router.navigateByUrl('home');
-            },
-            error => {
-              this.toast.error('Error');
-            },
-            () => {
-              this.form.reset();
-            });
+    this.authService.login(this.form.value)
+      .subscribe(data => {
+          this.toast.success('Autorización exitosa.');
+          this.router.navigateByUrl('home');
+        },
+        error => {
+          this.toast.error(`Error: ${error.error.message}`);
+        },
+        () => {
+          this.form.reset();
+        });
 
   }
 

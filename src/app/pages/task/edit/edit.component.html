@@ -1,0 +1,23 @@
+<form [formGroup]="form" class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Nombre</mat-label>
+    <input matInput placeholder="Nombre" formControlName="name">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Descripción</mat-label>
+    <input matInput placeholder="Descripción" formControlName="description">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+        <mat-label>Estatus</mat-label>
+    <input type="text" placeholder="Estatus" aria-label="Assignee" matInput formControlName="priorityName" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of priority" [value]="option.name" (onSelectionChange)="setItem(option.value)">
+        {{option.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div class="text-center">
+    <button mat-raised-button color="accent" class="mr-1" (click)="save()" [disabled]="!form.valid">Agregar</button>
+    <button mat-raised-button color="warn" (click)="close()">Cancelar</button>
+  </div>
+</form>

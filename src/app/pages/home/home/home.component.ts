@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../auth/services/auth.service";
-import {ApiService} from "../../auth/services/api.service";
+import {MatDialog} from "@angular/material/dialog";
+import {TasksExpiringComponent} from "../tasks-expiring/tasks-expiring.component";
 export interface Task {
   name: string;
   description: string;
@@ -12,19 +13,26 @@ export interface Task {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  displayedColumns: string[] = ['Nombre', 'Descripcion', 'Estatus'];
-  dataSource: any = [];
-  constructor(private authService: AuthService, private apiService: ApiService){ }
+  public tasks = JSON.parse(localStorage.getItem('tasks'));
+  constructor(private authService: AuthService,
+              public dialog: MatDialog){ }
 
   ngOnInit() {
-    this.apiService.get('tasks').subscribe((data: any) => {
-      console.log(data)
-      this.dataSource = data.data
-    })
+    if(this.tasks && this.tasks.length > 0){
+      this.openExpiring()
+    }
   }
 
   logout() {
     this.authService.logout()
+  }
+
+  openExpiring(){
+    this.dialog.open(TasksExpiringComponent, {
+      width: '350px',
+      data: this.tasks,
+      hasBackdrop: true
+    });
   }
 
 }

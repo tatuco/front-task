@@ -11,11 +11,11 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
   private _subjectToken: BehaviorSubject<string>;
-  private _subjectUser: BehaviorSubject<IUser>;
+  private _subjectTasks: BehaviorSubject<string>;
 
   constructor(private api: ApiService, private readonly router: Router) {
     this._subjectToken = new BehaviorSubject<string>(localStorage.getItem('token'));
-    this._subjectUser = new BehaviorSubject<IUser>(JSON.parse(localStorage.getItem('user')));
+    this._subjectTasks = new BehaviorSubject<string>(localStorage.getItem('tasks'));
   }
 
   get isAuthenticated() {
@@ -34,8 +34,7 @@ export class AuthService {
   }
 
   /*
-   * Comprobar la existencia de un token
-   * @returns {boolean}
+   * Guardar token
    */
   public set token(token: string) {
     localStorage.setItem('token', token);
@@ -43,31 +42,23 @@ export class AuthService {
   }
 
   /*
-   * Comprobar la existencia de un token
+   * Traer token
    */
   public get token(): string {
     return this._subjectToken.getValue();
   }
 
   /*
-   * Comprobar la existencia de un token
-   * @returns {boolean}
+   * Guardar tasks
    */
-  public get user(): IUser {
-    return this._subjectUser.getValue();
+  public set tasks(tasks: any) {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    this._subjectTasks.next(tasks);
   }
 
-  public set user(user: IUser) {
-    this._subjectUser.next(user);
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  /*
-   * Iniciar sesión
-   * @returns {Observable<never>}
-   */
   public login(user: any) {
-    const data = {email: user.email,
+    const data = {
+      email: user.email,
       password: user.password
     };
     const observer = this.api.post('login', data)
@@ -79,16 +70,33 @@ export class AuthService {
       },
       () => {
         this.token = (dUser as IUser).token;
-        // console.log(<IUser> dUser);
-        // localStorage.setItem('user', JSON.stringify(dUser.user));
-        // localStorage.setItem('id', JSON.stringify(dUser.user.id));
-        this._subjectUser.next(dUser);
+        this.tasks = (dUser as IUser).tasks;
       });
     return observer;
   }
 
-  logout () {
-    localStorage.removeItem('token')
+  public register(user: any) {
+    const data = {
+      email: user.email,
+      name: user.name,
+      password: user.password
+    };
+    const observer = this.api.post('register', data)
+      .pipe(share());
+    let dUser: any;
+    observer.subscribe(
+      d => (dUser = d),
+      () => {
+      },
+      () => {
+        //this.token = (dUser as IUser).token;
+        //this.tasks = (dUser as IUser).tasks;
+      });
+    return observer;
+  }
+
+  logout() {
+    localStorage.clear();
     this.router.navigateByUrl('login');
   }
 }

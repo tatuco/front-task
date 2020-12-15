@@ -1,45 +1,34 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  url = `${ environment.api.url }:${ environment.api.port }/api`;
-  httpOptions: any = {headers: new HttpHeaders({'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}`})};
-  constructor(public http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
-  get(endpoint: string, params?: any, reqOpts?: any) {
-    // if (!reqOpts) {
-    //   reqOpts = {
-    //     params: new HttpParams()
-    //   };
-    // }
-    //
-    // if (params) {
-    //   reqOpts.params = new HttpParams();
-    //   for (const k in params) {
-    //     if (params.hasOwnProperty(k)) {
-    //       reqOpts.params = reqOpts.params.set(k, params[k]);
-    //     }
-    //   }
-    // }
-
-    return this.http.get(this.url + '/' + endpoint, this.httpOptions);
+  generateUri(segment: string): string {
+    const url = Boolean(localStorage.getItem('token')) ? '' : '';
+    return `${environment.api.url}:${environment.api.port}/api/${url}${segment}`;
   }
 
-  post(endpoint: string, body: any, reqOpts?: any) {
-    return this.http.post(this.url + '/' + endpoint, body, reqOpts);
+  get(url: string, params ?: any): Observable<any> {
+    return this.http.get(this.generateUri(url), params);
   }
 
-  put(endpoint: string, body: any, reqOpts?: any) {
-    return this.http.put(this.url + '/' + endpoint, body, reqOpts);
+  post(url: string, data: any, params ?: any): Observable<any> {
+    return this.http.post(this.generateUri(url), data, params);
   }
 
-  delete(endpoint: string, reqOpts?: any) {
-    return this.http.delete(this.url + '/' + endpoint, reqOpts)
+  put(url: string, data: any, params ?: any): Observable<any> {
+    return this.http.put(this.generateUri(url), data, params);
+  }
+
+  delete(url: string, data ?: any): Observable<any> {
+    return this.http.delete(this.generateUri(url));
   }
 }

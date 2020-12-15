@@ -1,0 +1,31 @@
+<section id="login">
+  <div class="login-page">
+    <div class="form">
+      <div>
+        <h1>Registro </h1>
+      </div>
+      <form [formGroup]="form" (submit)="onSubmit()" novalidate>
+        <input type="text" placeholder="Name" formControlName="name" autocomplete="off" [ngClass]="{'input-invalid':fieldErrors('name')}"/>
+        <div style="height: 1rem;">
+          <div class="invalid-text" *ngIf="fieldErrors('name')">
+            * Campo invalido.
+          </div>
+        </div>
+        <input type="text" placeholder="Email" formControlName="email" autocomplete="off" [ngClass]="{'input-invalid':fieldErrors('email')}"/>
+        <div style="height: 1rem;">
+          <div class="invalid-text" *ngIf="fieldErrors('email')">
+            * Campo invalido.
+          </div>
+        </div>
+        <input type="password" placeholder="Contraseña" formControlName="password" autocomplete="off" [ngClass]="{'input-invalid':fieldErrors('password')}"/>
+        <div style="height: 1rem;">
+          <div class="invalid-text" *ngIf="fieldErrors('password')">
+            * Campo invalido.
+          </div>
+        </div>
+        <button type="submit" [disabled]="!form.valid">Guardar</button>
+      </form>
+      <button class="mt-2" type="submit" routerLink="/login">Volver </button>
+    </div>
+  </div>
+</section>
