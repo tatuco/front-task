@@ -8,12 +8,12 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./layout/public/public.module').then(m => m.PublicModule),
-     canActivate: [UnauthenticatedGuard]
+    // canActivate: [UnauthenticatedGuard]
   },
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
-    canActivate: [AuthenticatedGuard]
+  //  canActivate: [AuthenticatedGuard]
   },
   {
     path: '**',
